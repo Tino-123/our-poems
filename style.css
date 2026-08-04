@@ -1,0 +1,104 @@
+:root {
+  --bg: #fdfaf6;
+  --ink: #3a332c;
+  --muted: #8a7f72;
+  --accent: #b5654b;
+  --card: #ffffff;
+  --border: #ece4d8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+header.site-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+header.site-header h1 {
+  font-size: 2rem;
+  font-weight: normal;
+  letter-spacing: 0.02em;
+  margin: 0 0 8px;
+}
+
+header.site-header p {
+  color: var(--muted);
+  font-style: italic;
+  margin: 0;
+}
+
+.month-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+  margin-bottom: 28px;
+  transition: box-shadow 0.2s ease;
+}
+
+.month-card:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.05);
+}
+
+.month-card h2 {
+  margin: 0 0 4px;
+  font-weight: normal;
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+
+.month-card .date {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 18px;
+}
+
+.month-card .poem {
+  white-space: pre-wrap;
+  font-size: 1.05rem;
+  margin: 0 0 20px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.locked {
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+  padding: 24px;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  margin-bottom: 28px;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 60px;
+}
