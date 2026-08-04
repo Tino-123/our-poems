@@ -24,11 +24,9 @@
 POEMS = [
     {
         "id": "2026-08",
-        "reveal_date": "2026-08-01",
+        "reveal_date": "2026-08-07",
         "title": "August",
-        "poem": """Example poem -- replace me.
-Two lines here, or twenty,
-whatever the month calls for.""",
+        "poem": """This is for my love""",
         "images": [
             # "images/august-1.jpg",
             # "images/august-2.jpg",
