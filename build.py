@@ -38,17 +38,54 @@ def next_locked_date():
     return upcoming[0] if upcoming else None
 
 
-def render_card(poem):
+def split_first_paragraph(text):
+    """Split poem text into (first_paragraph, rest). A blank line marks the
+    split; if there's no blank line, the first line is used instead."""
+    if "\n\n" in text:
+        first, rest = text.split("\n\n", 1)
+        return first, rest
+    if "\n" in text:
+        first, rest = text.split("\n", 1)
+        return first, rest
+    return text, ""
+
+
+def render_card(poem, staged=False):
     imgs = "".join(
         f'<img src="{html.escape(img)}" alt="">' for img in poem.get("images", [])
     )
     gallery = f'<div class="gallery">{imgs}</div>' if imgs else ""
+
+    if not staged:
+        return f"""
+        <article class="month-card">
+          <h2>{html.escape(poem['title'])}</h2>
+          <div class="date">{poem['reveal_date']}</div>
+          <p class="poem">{html.escape(poem['poem'])}</p>
+          {gallery}
+        </article>
+        """
+
+    # Staged reveal for the newest poem: title first, then first
+    # paragraph, then the rest (+ images). Delays are in milliseconds
+    # and can be overridden per-poem via "reveal_delays": [first, rest].
+    delay_first, delay_rest = poem.get("reveal_delays", [2500, 6000])
+    first, rest = split_first_paragraph(poem["poem"])
+    rest_block = ""
+    if rest.strip():
+        rest_block = f'<p class="poem">{html.escape(rest)}</p>'
+
     return f"""
-    <article class="month-card">
+    <article class="month-card reveal-card"
+              data-first-delay="{delay_first}"
+              data-rest-delay="{delay_rest}">
       <h2>{html.escape(poem['title'])}</h2>
       <div class="date">{poem['reveal_date']}</div>
-      <p class="poem">{html.escape(poem['poem'])}</p>
-      {gallery}
+      <p class="poem reveal-stage" data-stage="first">{html.escape(first)}</p>
+      <div class="reveal-stage" data-stage="rest">
+        {rest_block}
+        {gallery}
+      </div>
     </article>
     """
 
@@ -68,10 +105,14 @@ def build():
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy(src, dest)
 
-    # copy stylesheet
+    # copy stylesheet and reveal script
     shutil.copy(ASSETS / "style.css", SITE / "style.css")
+    shutil.copy(ASSETS / "reveal.js", SITE / "reveal.js")
 
-    cards = "".join(render_card(p) for p in revealed_poems())
+    poems_list = revealed_poems()
+    cards = "".join(
+        render_card(p, staged=(i == 0)) for i, p in enumerate(poems_list)
+    )
 
     locked_html = ""
     nxt = next_locked_date()
@@ -99,6 +140,7 @@ def build():
   {locked_html}
   <footer>updated automatically</footer>
 </div>
+<script src="reveal.js"></script>
 </body>
 </html>
 """
