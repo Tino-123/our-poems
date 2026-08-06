@@ -96,7 +96,7 @@ go conquer your world and be happy
 
 Happy Birthday""",
         "images": [
-            # "images/birthday-1.jpg",
+            WhatsApp Image 2026-08-07 at 12.22.13 AM.jpeg,
         ],
         "reveal_delays": [800, 3000, 6500],
     },
