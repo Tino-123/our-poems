@@ -38,27 +38,20 @@ def next_locked_date():
     return upcoming[0] if upcoming else None
 
 
-def split_first_paragraph(text):
-    """Split poem text into (first_paragraph, rest). A blank line marks the
-    split; if there's no blank line, the first line is used instead."""
-    if "\n\n" in text:
-        first, rest = text.split("\n\n", 1)
-        return first, rest
-    if "\n" in text:
-        first, rest = text.split("\n", 1)
-        return first, rest
-    return text, ""
-
-
 def render_card(poem, staged=False):
     imgs = "".join(
         f'<img src="{html.escape(img)}" alt="">' for img in poem.get("images", [])
     )
     gallery = f'<div class="gallery">{imgs}</div>' if imgs else ""
+    banner = poem.get("banner")
+    banner_html = (
+        f'<div class="banner">{html.escape(banner)}</div>' if banner else ""
+    )
 
     if not staged:
         return f"""
         <article class="month-card">
+          {banner_html}
           <h2>{html.escape(poem['title'])}</h2>
           <div class="date">{poem['reveal_date']}</div>
           <p class="poem">{html.escape(poem['poem'])}</p>
@@ -66,24 +59,35 @@ def render_card(poem, staged=False):
         </article>
         """
 
-    # Staged reveal for the newest poem: title first, then first
-    # paragraph, then the rest (+ images). Delays are in milliseconds
-    # and can be overridden per-poem via "reveal_delays": [first, rest].
-    delay_first, delay_rest = poem.get("reveal_delays", [2500, 6000])
-    first, rest = split_first_paragraph(poem["poem"])
-    rest_block = ""
-    if rest.strip():
-        rest_block = f'<p class="poem">{html.escape(rest)}</p>'
+    # Staged reveal for the newest poem, three steps:
+    #   1) banner (e.g. "HAPPY BIRTHDAY"), if the poem has one
+    #   2) title + date
+    #   3) the full poem text + photos, all together, no further staging
+    # Delays are in milliseconds and can be overridden per-poem via
+    # "reveal_delays": [banner_delay, title_delay, body_delay].
+    delay_banner, delay_title, delay_body = poem.get(
+        "reveal_delays", [800, 3000, 6500]
+    )
+
+    banner_stage = ""
+    if banner:
+        banner_stage = (
+            f'<div class="banner reveal-stage" data-stage="banner">'
+            f'{html.escape(banner)}</div>'
+        )
 
     return f"""
     <article class="month-card reveal-card"
-              data-first-delay="{delay_first}"
-              data-rest-delay="{delay_rest}">
-      <h2>{html.escape(poem['title'])}</h2>
-      <div class="date">{poem['reveal_date']}</div>
-      <p class="poem reveal-stage" data-stage="first">{html.escape(first)}</p>
-      <div class="reveal-stage" data-stage="rest">
-        {rest_block}
+              data-delay-banner="{delay_banner}"
+              data-delay-title="{delay_title}"
+              data-delay-body="{delay_body}">
+      {banner_stage}
+      <div class="reveal-stage" data-stage="title">
+        <h2>{html.escape(poem['title'])}</h2>
+        <div class="date">{poem['reveal_date']}</div>
+      </div>
+      <div class="reveal-stage" data-stage="body">
+        <p class="poem">{html.escape(poem['poem'])}</p>
         {gallery}
       </div>
     </article>
