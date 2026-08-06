@@ -1,21 +1,23 @@
 // Staged reveal for the newest poem card.
-// The title and date show immediately (they're plain HTML, not staged).
-// Elements marked .reveal-stage fade in one at a time, after the delay
-// (in milliseconds) set on the card via data-first-delay / data-rest-delay.
+// Up to three stages fade in one after another, each after its own delay
+// (in milliseconds) counted from page load:
+//   1) banner   (e.g. "HAPPY BIRTHDAY") -- only if the poem has one
+//   2) title    (the h2 + date)
+//   3) body     (the full poem text + photos, all together -- nothing
+//                further is staged after this point)
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".reveal-card").forEach((card) => {
-    const firstDelay = parseInt(card.dataset.firstDelay || "2500", 10);
-    const restDelay = parseInt(card.dataset.restDelay || "6000", 10);
+    const delays = {
+      banner: parseInt(card.dataset.delayBanner || "0", 10),
+      title: parseInt(card.dataset.delayTitle || "0", 10),
+      body: parseInt(card.dataset.delayBody || "0", 10),
+    };
 
-    const firstStage = card.querySelector('[data-stage="first"]');
-    const restStage = card.querySelector('[data-stage="rest"]');
-
-    if (firstStage) {
-      setTimeout(() => firstStage.classList.add("visible"), firstDelay);
-    }
-    if (restStage) {
-      setTimeout(() => restStage.classList.add("visible"), restDelay);
-    }
+    card.querySelectorAll(".reveal-stage").forEach((el) => {
+      const stage = el.dataset.stage;
+      const delay = delays[stage] ?? 0;
+      setTimeout(() => el.classList.add("visible"), delay);
+    });
   });
 });
