@@ -31,7 +31,7 @@ POEMS = [
     {
         "id": "2026-08-birthday",
         "reveal_date": "2026-08-07",
-        "title": "For You",
+        "title": "lūx",
         "banner": "HAPPY BIRTHDAY",
         "poem": """In the beginning, the earth was without form, and void;
 and darkness was upon the face of the deep.
@@ -107,6 +107,6 @@ Happy Birthday""",
              "images/image-9.jpeg",
              "images/image-10.jpeg",
         ],
-        "reveal_delays": [800, 3000, 6500],
+       "reveal_delays": [800, 3000, 5500, 9000],
     },
 ]
