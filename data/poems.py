@@ -30,7 +30,7 @@
 POEMS = [
     {
         "id": "2026-08-birthday",
-        "reveal_date": "2026-08-06",
+        "reveal_date": "2026-08-07",
         "title": "For You",
         "banner": "HAPPY BIRTHDAY",
         "poem": """In the beginning, the earth was without form, and void;
@@ -96,7 +96,8 @@ go conquer your world and be happy
 
 Happy Birthday""",
         "images": [
-            WhatsApp Image 2026-08-07 at 12.22.13 AM.jpeg,
+            "image-1.jpg",
+            "image-2.jpg",
         ],
         "reveal_delays": [800, 3000, 6500],
     },
