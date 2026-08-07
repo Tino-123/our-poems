@@ -96,8 +96,8 @@ go conquer your world and be happy
 
 Happy Birthday""",
         "images": [
-            "image-1.jpg",
-            "image-2.jpg",
+            "images/image-1.jpeg",
+         "images/image-2.jpeg",
         ],
         "reveal_delays": [800, 3000, 6500],
     },
